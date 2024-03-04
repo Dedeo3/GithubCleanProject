@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">GithubListUser</string>
+    <string name="titleBtnFav">favorite</string>
+    <string name="searchbar_hint">search user</string>
 </resources>
