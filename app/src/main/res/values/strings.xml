@@ -2,4 +2,5 @@
     <string name="app_name">GithubListUser</string>
     <string name="titleBtnFav">favorite</string>
     <string name="searchbar_hint">search user</string>
+    <string name="no_favorite">No favorite</string>
 </resources>

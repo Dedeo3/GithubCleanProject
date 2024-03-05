@@ -14,12 +14,12 @@ interface UserDao {
     @Query("SELECT * FROM user")
     fun getAllUser(): Flow<List<UserEntity>>
 
-//    @Query("SELECT * FROM tourism where isFavorite = 1")
-//    fun getFavoriteTourism(): Flow<List<TourismEntity>>
+    @Query("SELECT * FROM user where isFavorite = 1")
+    fun getFavorite(): Flow<List<UserEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertUser(user: List<UserEntity>)
 //
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    suspend fun insertTourism(tourism: List<TourismEntity>)
-//
-//    @Update
-//    fun updateFavoriteTourism(tourism: TourismEntity)
+    @Update
+    fun updateFavorite(user:UserEntity)
 }

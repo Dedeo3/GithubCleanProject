@@ -1,7 +1,10 @@
+import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
+    id ("kotlin-kapt")
 }
 
 android {
@@ -25,11 +28,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         viewBinding = true
@@ -61,7 +64,16 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
-    implementation("androidx.room:room-runtime:2.6.1")
+//    implementation("androidx.room:room-runtime:2.6.1")
     implementation ("io.insert-koin:koin-core:3.3.2")
     implementation ("io.insert-koin:koin-android:3.3.2")
+
+    implementation( "androidx.room:room-runtime:2.5.1")
+    implementation ("androidx.room:room-ktx:2.5.1")
+    kapt ("androidx.room:room-compiler:2.5.1")
+    androidTestImplementation ("androidx.room:room-testing:2.5.1")
+
+//    implementation ("androidx.room:room-ktx:2.2.1")
+//    kapt ("androidx.room:room-compiler:2.2.1")
+//    androidTestImplementation ("androidx.room:room-testing:2.6.1")
 }

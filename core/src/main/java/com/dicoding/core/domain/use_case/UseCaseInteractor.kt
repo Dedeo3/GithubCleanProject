@@ -11,7 +11,7 @@ class UseCaseInteractor(private val repository: InterfaceUserRepository): UserUs
         return repository.getUser()
     }
 
-//    override fun getFavoriteTourism() = repository.getFavoriteTourism()
+    override fun getFavorite() = repository.getFavorite()
 
-//    override fun setFavoriteTourism(user: User, state: Boolean) = repository.setFavoriteTourism(user, state)
+    override fun setFavorite(user: User, state: Boolean) = repository.setFavorite(user, state)
 }

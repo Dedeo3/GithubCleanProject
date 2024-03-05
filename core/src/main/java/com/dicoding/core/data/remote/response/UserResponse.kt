@@ -11,7 +11,10 @@ data class UserResponse(
 	val incompleteResults: Boolean? = null,
 
 	@field:SerializedName("items")
-	val items: List<ItemsItem?>? = null
+	val items: List<ItemsItem>? = null,
+
+	@field:SerializedName("detail_user")
+    val detail: List<UserResponse>? = null
 )
 
 data class ItemsItem(
@@ -73,3 +76,5 @@ data class ItemsItem(
 	@field:SerializedName("organizations_url")
 	val organizationsUrl: String? = null
 )
+
+

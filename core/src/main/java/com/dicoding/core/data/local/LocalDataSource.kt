@@ -6,14 +6,14 @@ import kotlinx.coroutines.flow.Flow
 
 class LocalDataSource(private val dao: UserDao) {
 
-    fun getAllTourism(): Flow<List<UserEntity>> = dao.getAllUser()
+    fun getAllUser(): Flow<List<UserEntity>> = dao.getAllUser()
 
-//    fun getFavoriteTourism(): Flow<List<TourismEntity>> = tourismDao.getFavoriteTourism()
+    fun getFavoriteTourism(): Flow<List<UserEntity>> = dao.getFavorite()
 
-//    suspend fun insertTourism(tourismList: List<TourismEntity>) = tourismDao.insertTourism(tourismList)
+    suspend fun insertUser(list: List<UserEntity>) = dao.insertUser(list)
 
-//    fun setFavoriteTourism(tourism: TourismEntity, newState: Boolean) {
-//        tourism.isFavorite = newState
-//        tourismDao.updateFavoriteTourism(tourism)
-//    }
+    fun setFavorite(tourism: UserEntity, newState: Boolean) {
+        tourism.isFavorite = newState
+        dao.updateFavorite(tourism)
+    }
 }

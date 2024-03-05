@@ -6,46 +6,69 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.startActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.dicoding.core.data.Resource
+import com.dicoding.core.data.local.entity.UserEntity
+import com.dicoding.core.data.remote.response.ItemsItem
+import com.dicoding.core.ui.MainAdapter
 import com.dicoding.githublistuser.R
 import com.dicoding.githublistuser.databinding.ActivityMainBinding
+import com.dicoding.githublistuser.detail.DetailActivity
 import com.dicoding.githublistuser.favorite.FavoriteActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private val viewModel: MainViewModel by viewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding=ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.title="Github users"
-        searchBar()
 
+        getData()
 
     }
 
-    private fun searchBar(){
-        with(binding) {
-            searchView.setupWithSearchBar(searchBar)
-            searchView.editText.setOnEditorActionListener { textView, i, keyEvent ->
-                searchBar.setText(searchView.text.toString())
-                let {
-                    searchBar
-                }
-                searchView.hide()
-                false
-            }
+   private fun getData(){
+       val adapter = MainAdapter()
+       adapter.onItemClick = { selectedData ->
+           val intent = Intent(this, DetailActivity::class.java)
+           intent.putExtra(DetailActivity.EXTRA_DATA, selectedData)
+           startActivity(intent)
+       }
 
-            searchView.editText.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+       viewModel.user().observe(this) {
+           if (it != null) {
+               when (it) {
+                   is Resource.Loading -> binding.progressBar.visibility =
+                       View.VISIBLE
 
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+                   is Resource.Success -> {
+                       binding.progressBar.visibility = View.GONE
+                       adapter.setData(it.data)
+                       Toast.makeText(this,"Success load user ",Toast.LENGTH_SHORT).show()
+                   }
 
-                override fun afterTextChanged(s: Editable?) {
-                    searchBar.hint = if (s.isNullOrEmpty()) getString(R.string.searchbar_hint) else s.toString()
-                }
-            })
-        }
-    }
+                   is Resource.Error -> {
+                       binding.progressBar.visibility = View.GONE
+                       Toast.makeText(this,"Error load user ",Toast.LENGTH_SHORT).show()
+                   }
+               }
+           }
+       }
+       binding.mainRv.adapter = adapter
+
+       with(binding.mainRv) {
+           layoutManager = LinearLayoutManager(this@MainActivity)
+           setHasFixedSize(true)
+       }
+   }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)

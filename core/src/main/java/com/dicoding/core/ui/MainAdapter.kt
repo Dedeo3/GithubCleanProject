@@ -1,48 +1,55 @@
 package com.dicoding.core.ui
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.dicoding.core.R
 import com.dicoding.core.data.remote.response.ItemsItem
 import com.dicoding.core.databinding.ItemRowBinding
+import com.dicoding.core.domain.model.User
 
 
-class MainAdapter : ListAdapter<ItemsItem, MainAdapter.MyViewHolder>(DIFF_CALLBACK) {
+class MainAdapter : RecyclerView.Adapter<MainAdapter.ListViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val binding = ItemRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MyViewHolder(binding)
+    private var listData = ArrayList<User>()
+    var onItemClick: ((User) -> Unit)? = null
+
+    fun setData(newListData: List<User>?) {
+        if (newListData == null) return
+        listData.clear()
+        listData.addAll(newListData)
+        notifyDataSetChanged()
     }
 
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val user =getItem(position)
-        if (user != null){
-            holder.bind(user)
-            holder.itemView.setOnClickListener{}
-        }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        ListViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_row, parent, false))
+
+    override fun getItemCount() = listData.size
+
+    override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
+        val data = listData[position]
+        holder.bind(data)
     }
 
-    inner class MyViewHolder(private val binding: ItemRowBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(review: ItemsItem) {
-            val img = review.avatarUrl
-            Glide.with(binding.root.context)
-                .load(img)
-                .into(binding.itemPhoto)
-            binding.itemName.text = "${review.login}"
-        }
-    }
-
-    companion object {
-        val DIFF_CALLBACK = object : DiffUtil.ItemCallback<ItemsItem>() {
-            override fun areItemsTheSame(oldItem: ItemsItem, newItem: ItemsItem): Boolean {
-                return oldItem == newItem
+    inner class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val binding = ItemRowBinding.bind(itemView)
+        fun bind(data: User) {
+            with(binding) {
+                Glide.with(itemView.context)
+                    .load(data.image)
+                    .into(itemPhoto)
+                itemName.text = data.name
+//                item.text = data.address
             }
+        }
 
-            override fun areContentsTheSame(oldItem: ItemsItem, newItem: ItemsItem): Boolean {
-                return oldItem == newItem
+        init {
+            binding.root.setOnClickListener {
+                onItemClick?.invoke(listData[adapterPosition])
             }
         }
     }
