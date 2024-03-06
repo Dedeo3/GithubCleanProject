@@ -4,6 +4,7 @@ import android.app.Application
 import com.dicoding.core.di.databaseModule
 import com.dicoding.core.di.networkModule
 import com.dicoding.core.di.repositoryModule
+//import com.dicoding.fav.favorite.viewModelFav
 import com.dicoding.githublistuser.di.useCaseModule
 import com.dicoding.githublistuser.di.viewModelModule
 import org.koin.android.ext.koin.androidContext
@@ -23,7 +24,7 @@ class MyApplication : Application() {
                     networkModule,
                     repositoryModule,
                     useCaseModule,
-                    viewModelModule
+                    viewModelModule,
                 )
             )
         }

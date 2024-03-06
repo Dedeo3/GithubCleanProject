@@ -1,4 +1,4 @@
-package com.dicoding.githublistuser.favorite
+package com.dicoding.fav.favorite
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData

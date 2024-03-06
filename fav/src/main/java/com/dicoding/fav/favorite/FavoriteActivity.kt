@@ -1,4 +1,4 @@
-package com.dicoding.githublistuser.favorite
+package com.dicoding.fav.favorite
 
 import android.app.ProgressDialog.show
 import android.content.Intent
@@ -9,10 +9,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.core.data.Resource
 import com.dicoding.core.ui.MainAdapter
-import com.dicoding.githublistuser.R
-import com.dicoding.githublistuser.databinding.ActivityFavoriteBinding
+import com.dicoding.fav.databinding.ActivityFavoriteBinding
 import com.dicoding.githublistuser.detail.DetailActivity
-import com.dicoding.githublistuser.detail.DetailViewModel
+//import com.dicoding.githublistuser.R
+//import com.dicoding.githublistuser.databinding.ActivityFavoriteBinding
+//import com.dicoding.githublistuser.detail.DetailActivity
+//import com.dicoding.githublistuser.detail.DetailViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoriteActivity : AppCompatActivity() {
@@ -20,7 +22,7 @@ class FavoriteActivity : AppCompatActivity() {
     private val viewModel: FavoriteViewModel by viewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding=ActivityFavoriteBinding.inflate(layoutInflater)
+        binding= ActivityFavoriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
         getData()
     }
@@ -29,7 +31,7 @@ class FavoriteActivity : AppCompatActivity() {
         val adapter = MainAdapter()
         adapter.onItemClick = { selectedData ->
             val intent = Intent(this, DetailActivity::class.java)
-            intent.putExtra(DetailActivity.EXTRA_DATA, selectedData)
+            intent.putExtra("extra_data", selectedData)
             startActivity(intent)
         }
 

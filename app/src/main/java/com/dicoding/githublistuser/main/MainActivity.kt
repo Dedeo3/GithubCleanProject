@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -18,7 +19,7 @@ import com.dicoding.core.ui.MainAdapter
 import com.dicoding.githublistuser.R
 import com.dicoding.githublistuser.databinding.ActivityMainBinding
 import com.dicoding.githublistuser.detail.DetailActivity
-import com.dicoding.githublistuser.favorite.FavoriteActivity
+//import com.dicoding.fav.favorite.FavoriteActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
@@ -78,8 +79,17 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.btnFav -> {
-                startActivity(Intent(this@MainActivity, FavoriteActivity::class.java))
-                return true
+                try {
+                    val favoriteActivityClass = Class.forName("com.dicoding.fav.favorite.FavoriteActivity")
+                    startActivity(Intent(this@MainActivity, favoriteActivityClass))
+                    Log.d("fav:","found")
+                    return true
+                } catch (e: ClassNotFoundException) {
+                    e.printStackTrace()
+                    Log.d("fav:","not found")
+                    return false
+                }
+
             }
 
             else -> return super.onOptionsItemSelected(item)
