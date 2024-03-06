@@ -16,6 +16,7 @@ import com.dicoding.githublistuser.detail.DetailActivity
 //import com.dicoding.githublistuser.detail.DetailActivity
 //import com.dicoding.githublistuser.detail.DetailViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.context.loadKoinModules
 
 class FavoriteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFavoriteBinding
@@ -24,6 +25,7 @@ class FavoriteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding= ActivityFavoriteBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        loadKoinModules(viewModelFav)
         getData()
     }
 
