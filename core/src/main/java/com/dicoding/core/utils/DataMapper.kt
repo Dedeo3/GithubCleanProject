@@ -6,17 +6,25 @@ import com.dicoding.core.data.remote.response.UserResponse
 import com.dicoding.core.domain.model.User
 
 object DataMapper {
-    fun mapResponsesToEntities(input: List<ItemsItem>): List<UserEntity> {
+    fun mapResponsesToEntities(
+        input: List<ItemsItem>,
+        existingFavorites: List<UserEntity>
+    ): List<UserEntity> {
         val userList = ArrayList<UserEntity>()
-        input.map {
+
+        input.map { apiUser ->
+            val existingFavorite = existingFavorites.find { it.id == apiUser.id }
+
             val user = UserEntity(
-                id=it.id!!,
-                name = it.login,
-                image = it.avatarUrl,
-                isFavorite = false
+                id = apiUser.id!!,
+                name = apiUser.login,
+                image = apiUser.avatarUrl,
+                isFavorite = existingFavorite?.isFavorite ?: false
             )
+
             userList.add(user)
         }
+
         return userList
     }
 
@@ -26,14 +34,14 @@ object DataMapper {
                 id = it.id,
                 name = it.name!!,
                 image = it.image!!,
-                isFavorite = false
+                isFavorite = it.isFavorite
             )
         }
-//
+
     fun mapDomainToEntity(input: User) = UserEntity(
         id = input.id,
         name = input.name,
         image = input.image,
-        isFavorite = false
+        isFavorite = input.isFavorite
     )
 }

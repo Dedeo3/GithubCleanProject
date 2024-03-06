@@ -10,6 +10,7 @@ import com.dicoding.core.domain.model.User
 import com.dicoding.core.utils.AppExecutors
 import com.dicoding.core.utils.DataMapper
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 
 class UserRepository(
@@ -26,15 +27,14 @@ class UserRepository(
                 }
             }
 
-            override fun shouldFetch(data: List<User>?): Boolean =
-//                data == null || data.isEmpty()
-                true // ganti dengan true jika ingin selalu mengambil data dari internet
+            override fun shouldFetch(data: List<User>?): Boolean = true
 
             override suspend fun createCall(): Flow<ApiResponse<List<ItemsItem>>> =
                 remoteDataSource.getAllUser()
 
             override suspend fun saveCallResult(data: List<ItemsItem>) {
-                val userList = DataMapper.mapResponsesToEntities(data)
+                val existingFavorites = localDataSource.getFavoriteTourism().firstOrNull() ?: emptyList()
+                val userList = DataMapper.mapResponsesToEntities(data, existingFavorites)
                 localDataSource.insertUser(userList)
             }
         }.asFlow()
@@ -47,7 +47,7 @@ class UserRepository(
     }
 
     override fun setFavorite(user: User, state: Boolean) {
-        val tourismEntity = DataMapper.mapDomainToEntity(user)
-        appExecutors.diskIO().execute { localDataSource.setFavorite(tourismEntity, state) }
+        val entity = DataMapper.mapDomainToEntity(user)
+        appExecutors.diskIO().execute { localDataSource.setFavorite(entity, state) }
     }
 }
