@@ -1,5 +1,6 @@
 package com.dicoding.core.ui
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,25 +14,17 @@ import com.dicoding.core.databinding.ItemRowBinding
 import com.dicoding.core.domain.model.User
 
 
-class MainAdapter : RecyclerView.Adapter<MainAdapter.ListViewHolder>() {
+class MainAdapter : ListAdapter<User, MainAdapter.ListViewHolder>(UserDiffCallback()) {
 
-    private var listData = ArrayList<User>()
     var onItemClick: ((User) -> Unit)? = null
 
-    fun setData(newListData: List<User>?) {
-        if (newListData == null) return
-        listData.clear()
-        listData.addAll(newListData)
-        notifyDataSetChanged()
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ListViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_row, parent, false))
-
-    override fun getItemCount() = listData.size
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder =
+        ListViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_row, parent, false)
+        )
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        val data = listData[position]
+        val data = getItem(position)
         holder.bind(data)
     }
 
@@ -43,14 +36,23 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ListViewHolder>() {
                     .load(data.image)
                     .into(itemPhoto)
                 itemName.text = data.name
-//                item.text = data.address
             }
         }
 
         init {
             binding.root.setOnClickListener {
-                onItemClick?.invoke(listData[adapterPosition])
+                onItemClick?.invoke(getItem(adapterPosition))
             }
+        }
+    }
+
+    class UserDiffCallback : DiffUtil.ItemCallback<User>() {
+        override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
+            return oldItem == newItem
         }
     }
 }

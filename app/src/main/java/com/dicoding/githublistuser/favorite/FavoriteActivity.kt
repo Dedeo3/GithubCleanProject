@@ -37,7 +37,7 @@ class FavoriteActivity : AppCompatActivity() {
             binding.empty.visibility=View.VISIBLE
             if (it != null) {
                 binding.progressBar.visibility = View.GONE
-                adapter.setData(it)
+                adapter.submitList(it)
 
                 Toast.makeText(this,"Success load favorite ", Toast.LENGTH_SHORT).show()
             }

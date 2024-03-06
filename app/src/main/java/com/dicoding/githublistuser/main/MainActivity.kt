@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
                    is Resource.Success -> {
                        binding.progressBar.visibility = View.GONE
-                       adapter.setData(it.data)
+                       adapter.submitList(it.data)
                        Toast.makeText(this,"Success load user ",Toast.LENGTH_SHORT).show()
                    }
 
