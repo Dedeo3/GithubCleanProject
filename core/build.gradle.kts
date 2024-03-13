@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.dicoding.core"
-    compileSdk = 34
+    compileSdk = 33
 
     defaultConfig {
         minSdk = 21
